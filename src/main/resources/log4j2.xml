@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="XMLConfigTest"
+	monitorInterval="30">
+	<Properties>
+		<Property name="filename">logs/application.log</Property>
+		<Property name="LOG_PATTERN"> 
+			%d{yyyy-MM-dd HH:mm:ss.SSS}%10p %C{1.} [%t] [ %-40.40c{1.}] %m%n
+		</Property>
+	</Properties>
+	<ThresholdFilter/>
+	<Appenders>
+		<Console name="STDOUT">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} [%15.15t] %-40.40c{1.} : %m%n%ex" />
+		</Console>
+		<Console name="FLOW">
+			this pattern outputs class name and line number
+			<PatternLayout pattern="${LOG_PATTERN}" />
+			<filters>
+				<MarkerFilter marker="FLOW" onMatch="ACCEPT"
+					onMismatch="NEUTRAL" />
+				<MarkerFilter marker="EXCEPTION" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</filters>
+		</Console>
+		<RollingFile name="FileAppender" fileName="${filename}"
+			filePattern="logs/application-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<pattern>${LOG_PATTERN}</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="app.console" level="info" additivity="false">
+			<AppenderRef ref="STDOUT" />
+			<!-- <AppenderRef ref="FileAppender" /> -->
+		</Logger>
+		<Logger name="app.file" level="info" additivity="false">
+			<AppenderRef ref="FileAppender" />
+			<AppenderRef ref="STDOUT" level="error" />
+		</Logger>
+		<Root >
+			<AppenderRef ref="STDOUT" /> 
+			<!-- <AppenderRef ref="FileAppender" /> -->
+		</Root>
+	</Loggers>
+</Configuration>
