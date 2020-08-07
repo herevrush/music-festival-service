@@ -6,7 +6,5 @@ import music.festival.backend.dto.RecordLabel;
 
 public interface MusicFestivalService {
 
-//	List<MusicFestival> getAllByMusicFestivals();
-
 	List<RecordLabel> getAllByRecordLabels();
 }
